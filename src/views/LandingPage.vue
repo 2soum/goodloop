@@ -17,6 +17,18 @@
 
       <!-- Video Demo Section -->
       <VideoDemo />
+
+      <!-- Feature Section -->
+      <FeatureSection />
+
+      <!-- Pricing Section -->
+      <PricingSection />
+
+      <!-- FAQ Section -->
+      <FaqSection />
+
+      <!-- Final CTA Footer -->
+      <FinalCTAFooter />
     </div>
   </template>
   
@@ -24,13 +36,20 @@
   import Header from '../components/landing/Header.vue';
   import Hero from '../components/landing/Hero.vue';
   import VideoDemo from '../components/landing/VideoDemo.vue';
-
+  import FeatureSection from '../components/landing/FeatureSection.vue';
+  import PricingSection from '../components/landing/PricingSection.vue';
+  import FaqSection from '../components/landing/FaqSection.vue';
+  import FinalCTAFooter from '../components/landing/FinalCTAFooter.vue';
   export default {
     name: 'LandingPage',
     components: {
       Header,
       Hero,
-      VideoDemo
+      VideoDemo,
+      FeatureSection,
+      PricingSection,
+      FaqSection,
+      FinalCTAFooter
     },
     methods: {
       handleLogin() {
