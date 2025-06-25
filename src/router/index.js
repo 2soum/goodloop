@@ -10,12 +10,36 @@ const router = createRouter({
       name: 'home',
       component: LandingPage
     },
-    // {
-    //   path: '/dashboard',
-    //   name: 'dashboard',
-    //   component: () => import('../views/Dashboard.vue'),
-    //   meta: { requiresAuth: true }
-    // },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/Dashboard.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/journal/sleep',
+      name: 'sleep',
+      component: () => import('../views/Sleep.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/journal/mood',
+      name: 'mood',
+      component: () => import('../views/Mood.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/journal/activity',
+      name: 'activity',
+      component: () => import('../views/Activity.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/journal/nutrition',
+      name: 'nutrition',
+      component: () => import('../views/Nutrition.vue'),
+      meta: { requiresAuth: true }
+    },
     // {
     //   path: '/journal',
     //   name: 'journal',

@@ -4,6 +4,6 @@ import LandingPage from './views/LandingPage.vue'
 </script>
 
 <template>
-  <LandingPage />
+  <RouterView />
 </template>
 
