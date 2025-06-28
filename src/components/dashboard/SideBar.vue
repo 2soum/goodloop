@@ -184,7 +184,7 @@
             </li>
             <li>
               <router-link 
-                to="/" 
+                to="/export" 
                 :class="[
                   'flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group',
                   $route.path === '/export' 
