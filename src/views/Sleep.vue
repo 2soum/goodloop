@@ -1,12 +1,12 @@
 <template>
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30 flex">
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30 flex ">
       <!-- Sidebar -->
       <SideBar />
   
       <!-- Main Content -->
-      <div class="flex-1 flex flex-col">
+      <div class="flex-1 flex flex-col ml-64 overflow-hidden">
         <!-- Header -->
-        <header class="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-8 py-4">
+        <header class="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-8 py-4 ">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4">
               <!-- Back to Dashboard -->
@@ -49,7 +49,7 @@
         </header>
   
         <!-- Dashboard Content -->
-        <main class="flex-1 p-8">
+        <main class="flex-1 p-6">
           <!-- Stats Cards Row -->
           <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <!-- Average Sleep -->

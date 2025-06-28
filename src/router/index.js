@@ -1,5 +1,6 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
+import { isUserAuthenticated } from '@/services/auth'
 import LandingPage from '../views/LandingPage.vue'
 
 const router = createRouter({
@@ -9,6 +10,16 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: LandingPage
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/Login.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/Register.vue')
     },
     {
       path: '/dashboard',
@@ -40,6 +51,25 @@ const router = createRouter({
       component: () => import('../views/Nutrition.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/goals',
+      name: 'goals',
+      component: () => import('../views/Goals.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: () => import('../views/Chat.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/export',
+      name: 'export',
+      component: () => import('../views/ExportFIt.vue'),
+      meta: { requiresAuth: true }
+    }
+
     // {
     //   path: '/journal',
     //   name: 'journal',
@@ -63,12 +93,23 @@ const router = createRouter({
 
 // Navigation guard pour l'authentification
 router.beforeEach((to, from, next) => {
-  // Pour l'instant on laisse passer, on implémentera l'auth plus tard
+  // Vérifier si la route nécessite une authentification
   if (to.meta.requiresAuth) {
-    // TODO: Vérifier si l'utilisateur est connecté
-    // Pour l'instant on redirige vers la landing page
-    console.log('Route protégée, auth à implémenter')
+    // Vérifier si l'utilisateur est connecté
+    if (!isUserAuthenticated()) {
+      // Rediriger vers la page de connexion
+      next('/login')
+      return
+    }
   }
+  
+  // Si l'utilisateur est connecté et essaie d'accéder aux pages de connexion/inscription
+  if (isUserAuthenticated() && (to.name === 'login' || to.name === 'register')) {
+    // Rediriger vers le dashboard
+    next('/dashboard')
+    return
+  }
+  
   next()
 })
 

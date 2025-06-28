@@ -10,7 +10,7 @@
       </div>
   
       <!-- Header -->
-      <Header @login="handleLogin" />
+      <Header />
   
       <!-- Hero Section -->
       <Hero @get-started="handleGetStarted" @demo="handleDemo" />
@@ -40,6 +40,8 @@
   import PricingSection from '../components/landing/PricingSection.vue';
   import FaqSection from '../components/landing/FaqSection.vue';
   import FinalCTAFooter from '../components/landing/FinalCTAFooter.vue';
+  import { useRouter } from 'vue-router'
+
   export default {
     name: 'LandingPage',
     components: {
@@ -51,18 +53,22 @@
       FaqSection,
       FinalCTAFooter
     },
-    methods: {
-      handleLogin() {
-        console.log('Connexion à implémenter')
-        // TODO: Rediriger vers Microsoft OAuth
-      },
-      handleGetStarted() {
+    setup() {
+      const router = useRouter()
+      
+      const handleGetStarted = () => {
         console.log('Commencer - redirection vers inscription')
-        // TODO: Rediriger vers le dashboard ou inscription
-      },
-      handleDemo() {
+        router.push('/register')
+      }
+      
+      const handleDemo = () => {
         console.log('Voir la démo - à implémenter')
         // TODO: Rediriger ou afficher la démo
+      }
+      
+      return {
+        handleGetStarted,
+        handleDemo
       }
     }
   }

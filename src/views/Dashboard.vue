@@ -9,7 +9,7 @@
         />
   
         <!-- Main Dashboard Content -->
-        <div class="flex-1">
+        <div class="flex-1 ml-64">
           <!-- Top Header -->
           <header class="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-8 py-4">
             <div class="flex items-center justify-between">
@@ -20,22 +20,26 @@
                 <p class="text-gray-600 mt-1">Voici un aperçu de votre bien-être aujourd'hui</p>
               </div>
               <div class="flex items-center space-x-4">
-                <!-- Quick Add Button -->
-                <button 
-                  @click="openQuickAdd"
-                  class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/30 active:scale-95 flex items-center space-x-2"
-                >
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-                  </svg>
-                  <span>Ajouter une entrée</span>
-                </button>
+                <!-- User Info & Logout -->
+                <div class="flex items-center space-x-3">
+                  <div class="text-right">
+                    <p class="text-sm text-gray-500">{{ userEmail }}</p>
+                    <p class="text-xs text-gray-400">{{ userProvider }}</p>
+                  </div>
+                  <button 
+                    @click="handleLogout"
+                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span>Déconnexion</span>
+                  </button>
+                </div>
+                
                 
                 <!-- Date -->
-                <div class="text-right">
-                  <p class="text-sm text-gray-500">Aujourd'hui</p>
-                  <p class="font-semibold text-gray-800">{{ currentDate }}</p>
-                </div>
+               
               </div>
             </div>
           </header>
@@ -238,31 +242,56 @@
   </template>
   
   <script>
-  import SideBar from '@/components/dashboard/SideBar.vue';
+  import { ref, computed, onMounted } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { getCurrentUser, signOut } from '@/services/auth'
+  import SideBar from '@/components/dashboard/SideBar.vue'
   
   export default {
     name: 'Dashboard',
     components: {
       SideBar
     },
-    data() {
-      return {
-        userName: 'Thomas',
-        showQuickAdd: false,
-        todayStats: {
-          sleep: '7h 30m',
-          sleepQuality: 'Excellente',
-          mood: 8,
-          moodEmoji: '😊',
-          moodDescription: 'Très bonne humeur',
-          activity: '45 min',
-          activityType: 'Course à pied',
-          nutrition: '3/3'
+    setup() {
+      const router = useRouter()
+      const showQuickAdd = ref(false)
+      
+      // Récupérer l'utilisateur connecté
+      const currentUser = ref(null)
+      
+      onMounted(() => {
+        currentUser.value = getCurrentUser()
+        if (!currentUser.value) {
+          router.push('/login')
         }
-      };
-    },
-    computed: {
-      currentDate() {
+      })
+      
+      // Computed properties pour l'utilisateur
+      const userName = computed(() => {
+        return currentUser.value?.name || 'Utilisateur'
+      })
+      
+      const userEmail = computed(() => {
+        return currentUser.value?.email || 'email@example.com'
+      })
+      
+      const userProvider = computed(() => {
+        const provider = currentUser.value?.provider || 'email'
+        return provider === 'microsoft' ? 'Microsoft' : 'Email'
+      })
+      
+      const todayStats = ref({
+        sleep: '7h 30m',
+        sleepQuality: 'Excellente',
+        mood: 8,
+        moodEmoji: '😊',
+        moodDescription: 'Très bonne humeur',
+        activity: '45 min',
+        activityType: 'Course à pied',
+        nutrition: '3/3'
+      })
+      
+      const currentDate = computed(() => {
         const options = { 
           weekday: 'long', 
           year: 'numeric', 
@@ -270,16 +299,31 @@
           day: 'numeric' 
         };
         return new Date().toLocaleDateString('fr-FR', options);
+      })
+      
+      const openQuickAdd = () => {
+        showQuickAdd.value = true;
       }
-    },
-    methods: {
-      openQuickAdd() {
-        this.showQuickAdd = true;
-      },
-      handleUpgradePlan() {
-        // Gérer l'upgrade du plan
+      
+      const handleUpgradePlan = () => {
         console.log('Upgrade plan clicked');
-        // Ici vous pouvez ajouter la logique pour l'upgrade
+      }
+      
+      const handleLogout = () => {
+        signOut()
+        router.push('/')
+      }
+      
+      return {
+        userName,
+        userEmail,
+        userProvider,
+        showQuickAdd,
+        todayStats,
+        currentDate,
+        openQuickAdd,
+        handleUpgradePlan,
+        handleLogout
       }
     }
   };

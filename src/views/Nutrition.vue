@@ -4,7 +4,7 @@
       <SideBar />
   
       <!-- Main Content -->
-      <div class="flex-1 flex flex-col">
+      <div class="flex-1 flex flex-col ml-64">
         <!-- Header -->
         <header class="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-8 py-4">
           <div class="flex items-center justify-between">
@@ -49,37 +49,9 @@
         </header>
   
         <!-- Dashboard Content -->
-        <main class="flex-1 p-8">
+        <main class="flex-1 p-6">
           <!-- Today's Meals Progress -->
-          <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Repas d'aujourd'hui</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <!-- Breakfast -->
-              <div class="text-center p-4 rounded-xl bg-yellow-50 border border-yellow-200">
-                <div class="text-3xl mb-2">🌅</div>
-                <h3 class="font-semibold text-gray-800">Petit-déjeuner</h3>
-                <p class="text-sm text-green-600 font-medium mt-1">✓ Pris</p>
-              </div>
-              <!-- Lunch -->
-              <div class="text-center p-4 rounded-xl bg-orange-50 border border-orange-200">
-                <div class="text-3xl mb-2">☀️</div>
-                <h3 class="font-semibold text-gray-800">Déjeuner</h3>
-                <p class="text-sm text-green-600 font-medium mt-1">✓ Pris</p>
-              </div>
-              <!-- Dinner -->
-              <div class="text-center p-4 rounded-xl bg-purple-50 border border-purple-200">
-                <div class="text-3xl mb-2">🌙</div>
-                <h3 class="font-semibold text-gray-800">Dîner</h3>
-                <p class="text-sm text-gray-500 font-medium mt-1">À venir</p>
-              </div>
-              <!-- Snacks -->
-              <div class="text-center p-4 rounded-xl bg-green-50 border border-green-200">
-                <div class="text-3xl mb-2">🍎</div>
-                <h3 class="font-semibold text-gray-800">Collations</h3>
-                <p class="text-sm text-green-600 font-medium mt-1">1 prise</p>
-              </div>
-            </div>
-          </div>
+          
   
           <!-- Stats Cards Row -->
           <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -214,7 +186,7 @@
         @click="showNutritionModal = false"
       >
         <div 
-          class="bg-white rounded-2xl w-full max-w-md transform transition-all duration-300 scale-100"
+          class="bg-white rounded-2xl w-full max-w-4xl transform transition-all duration-300 scale-100"
           @click.stop
         >
           <!-- Modal Header -->
@@ -236,10 +208,11 @@
           </div>
   
           <!-- Modal Content -->
-          <div class="p-6">
-            <form @submit.prevent="saveNutrition" class="space-y-6">
-              <!-- Date and Time -->
-              <div class="grid grid-cols-2 gap-4">
+          <div class="p-8">
+            <form @submit.prevent="saveNutrition" class="space-y-8">
+              <!-- First Row: Date, Time, and Meal Type -->
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Date -->
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-2">Date</label>
                   <input 
@@ -250,6 +223,8 @@
                     required
                   >
                 </div>
+                
+                <!-- Time -->
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-2">Heure</label>
                   <input 
@@ -259,111 +234,117 @@
                     required
                   >
                 </div>
-              </div>
-  
-              <!-- Meal Type -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Type de repas</label>
-                <div class="grid grid-cols-2 gap-3">
-                  <button
-                    v-for="meal in mealTypes"
-                    :key="meal.type"
-                    type="button"
-                    @click="nutritionForm.mealType = meal.type"
-                    :class="[
-                      'p-4 rounded-xl border-2 transition-all duration-300 text-center hover:scale-105',
-                      nutritionForm.mealType === meal.type
-                        ? 'border-green-500 bg-green-50 text-green-700'
-                        : 'border-gray-200 hover:border-green-300 text-gray-600'
-                    ]"
-                  >
-                    <div class="text-2xl mb-2">{{ meal.emoji }}</div>
-                    <div class="font-medium text-sm">{{ meal.label }}</div>
-                  </button>
+                
+                <!-- Meal Type -->
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-3">Type de repas</label>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="meal in mealTypes"
+                      :key="meal.type"
+                      type="button"
+                      @click="nutritionForm.mealType = meal.type"
+                      :class="[
+                        'p-3 rounded-xl border-2 transition-all duration-300 text-center hover:scale-105',
+                        nutritionForm.mealType === meal.type
+                          ? 'border-green-500 bg-green-50 text-green-700'
+                          : 'border-gray-200 hover:border-green-300 text-gray-600'
+                      ]"
+                    >
+                      <div class="text-xl mb-1">{{ meal.emoji }}</div>
+                      <div class="font-medium text-xs">{{ meal.label }}</div>
+                    </button>
+                  </div>
                 </div>
               </div>
   
-              <!-- Food Description -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Description du repas</label>
-                <textarea 
-                  v-model="nutritionForm.description"
-                  placeholder="Décrivez votre repas (ex: Salade de quinoa aux légumes grillés)"
-                  rows="3"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
-                  required
-                ></textarea>
-              </div>
-  
-              <!-- Portion Size -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Taille de la portion</label>
-                <div class="grid grid-cols-3 gap-3">
-                  <button
-                    v-for="portion in portionSizes"
-                    :key="portion.value"
-                    type="button"
-                    @click="nutritionForm.portion = portion.value"
-                    :class="[
-                      'p-3 rounded-xl border-2 transition-all duration-300 text-center',
-                      nutritionForm.portion === portion.value
-                        ? 'border-green-500 bg-green-50 text-green-700'
-                        : 'border-gray-200 hover:border-green-300 text-gray-600'
-                    ]"
-                  >
-                    <div class="text-lg mb-1">{{ portion.emoji }}</div>
-                    <div class="font-medium text-xs">{{ portion.label }}</div>
-                  </button>
+              <!-- Second Row: Description and Portion -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Food Description -->
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2">Description du repas</label>
+                  <textarea 
+                    v-model="nutritionForm.description"
+                    placeholder="Décrivez votre repas (ex: Salade de quinoa aux légumes grillés)"
+                    rows="4"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                    required
+                  ></textarea>
+                </div>
+                
+                <!-- Portion Size -->
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-3">Taille de la portion</label>
+                  <div class="grid grid-cols-3 gap-3">
+                    <button
+                      v-for="portion in portionSizes"
+                      :key="portion.value"
+                      type="button"
+                      @click="nutritionForm.portion = portion.value"
+                      :class="[
+                        'p-4 rounded-xl border-2 transition-all duration-300 text-center',
+                        nutritionForm.portion === portion.value
+                          ? 'border-green-500 bg-green-50 text-green-700'
+                          : 'border-gray-200 hover:border-green-300 text-gray-600'
+                      ]"
+                    >
+                      <div class="text-2xl mb-2">{{ portion.emoji }}</div>
+                      <div class="font-medium text-sm">{{ portion.label }}</div>
+                    </button>
+                  </div>
                 </div>
               </div>
   
-              <!-- Nutritional Quality -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Qualité nutritionnelle</label>
-                <div class="grid grid-cols-3 gap-3">
-                  <button
-                    v-for="quality in nutritionalQualities"
-                    :key="quality.value"
-                    type="button"
-                    @click="nutritionForm.quality = quality.value"
-                    :class="[
-                      'p-3 rounded-xl border-2 transition-all duration-300 text-center',
-                      nutritionForm.quality === quality.value
-                        ? 'border-green-500 bg-green-50 text-green-700'
-                        : 'border-gray-200 hover:border-green-300 text-gray-600'
-                    ]"
-                  >
-                    <div class="text-lg mb-1">{{ quality.emoji }}</div>
-                    <div class="font-medium text-xs">{{ quality.label }}</div>
-                  </button>
+              <!-- Third Row: Quality and Photo -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Nutritional Quality -->
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-3">Qualité nutritionnelle</label>
+                  <div class="grid grid-cols-3 gap-3">
+                    <button
+                      v-for="quality in nutritionalQualities"
+                      :key="quality.value"
+                      type="button"
+                      @click="nutritionForm.quality = quality.value"
+                      :class="[
+                        'p-4 rounded-xl border-2 transition-all duration-300 text-center',
+                        nutritionForm.quality === quality.value
+                          ? 'border-green-500 bg-green-50 text-green-700'
+                          : 'border-gray-200 hover:border-green-300 text-gray-600'
+                      ]"
+                    >
+                      <div class="text-2xl mb-2">{{ quality.emoji }}</div>
+                      <div class="font-medium text-sm">{{ quality.label }}</div>
+                    </button>
+                  </div>
+                </div>
+                
+                <!-- Photo Upload Option -->
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2">Photo (optionnel)</label>
+                  <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors duration-200 h-full flex flex-col items-center justify-center">
+                    <svg class="w-12 h-12 text-gray-400 mb-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                    </svg>
+                    <p class="text-gray-500 text-sm mb-1">Ajoutez une photo de votre repas</p>
+                    <p class="text-gray-400 text-xs">JPG, PNG jusqu'à 5MB</p>
+                  </div>
                 </div>
               </div>
   
-              <!-- Photo Upload Option -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Photo (optionnel)</label>
-                <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors duration-200">
-                  <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-                  </svg>
-                  <p class="text-gray-500 text-sm">Ajoutez une photo de votre repas</p>
-                  <p class="text-gray-400 text-xs mt-1">JPG, PNG jusqu'à 5MB</p>
-                </div>
-              </div>
-  
-              <!-- Submit -->
-              <div class="flex space-x-3 pt-4">
+              <!-- Submit Buttons -->
+              <div class="flex space-x-4 pt-6 border-t border-gray-200">
                 <button 
                   type="button"
                   @click="showNutritionModal = false"
-                  class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors duration-200"
+                  class="flex-1 bg-gray-100 text-gray-700 py-4 rounded-xl font-medium hover:bg-gray-200 transition-colors duration-200"
                 >
                   Annuler
                 </button>
                 <button 
                   type="submit"
                   :disabled="!isFormValid"
-                  class="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 disabled:from-gray-400 disabled:to-gray-500 text-white py-3 rounded-xl font-semibold transition-all duration-300 disabled:cursor-not-allowed"
+                  class="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 disabled:from-gray-400 disabled:to-gray-500 text-white py-4 rounded-xl font-semibold transition-all duration-300 disabled:cursor-not-allowed"
                 >
                   Enregistrer
                 </button>

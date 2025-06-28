@@ -4,7 +4,7 @@
       <SideBar />
   
       <!-- Main Content -->
-      <div class="flex-1 flex flex-col">
+      <div class="flex-1 flex flex-col ml-64">
         <!-- Header -->
         <header class="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-8 py-4">
           <div class="flex items-center justify-between">
@@ -49,7 +49,7 @@
         </header>
   
         <!-- Dashboard Content -->
-        <main class="flex-1 p-8">
+        <main class="flex-1 p-6">
           <!-- Stats Cards Row -->
           <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <!-- Weekly Total -->
@@ -183,7 +183,7 @@
         @click="showActivityModal = false"
       >
         <div 
-          class="bg-white rounded-2xl w-full max-w-md transform transition-all duration-300 scale-100"
+          class="bg-white rounded-2xl w-full max-w-4xl transform transition-all duration-300 scale-100"
           @click.stop
         >
           <!-- Modal Header -->
@@ -207,115 +207,140 @@
           <!-- Modal Content -->
           <div class="p-6">
             <form @submit.prevent="saveActivity" class="space-y-6">
-              <!-- Date and Time -->
-              <div class="grid grid-cols-2 gap-4">
+              <!-- First Row: Date, Time, and Activity Type -->
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <!-- Date -->
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-2">Date</label>
                   <input 
                     v-model="activityForm.date"
                     type="date" 
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                     :max="today"
                     required
                   >
                 </div>
+                
+                <!-- Time -->
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-2">Heure</label>
                   <input 
                     v-model="activityForm.time"
                     type="time" 
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                     required
                   >
                 </div>
-              </div>
-  
-              <!-- Activity Type -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Type d'activité</label>
-                <div class="grid grid-cols-2 gap-3">
-                  <button
-                    v-for="activity in activityTypes"
-                    :key="activity.type"
-                    type="button"
-                    @click="selectActivity(activity)"
-                    :class="[
-                      'p-4 rounded-xl border-2 transition-all duration-300 text-center hover:scale-105',
-                      activityForm.type === activity.type
-                        ? 'border-orange-500 bg-orange-50 text-orange-700'
-                        : 'border-gray-200 hover:border-orange-300 text-gray-600'
-                    ]"
-                  >
-                    <div class="text-2xl mb-2">{{ activity.emoji }}</div>
-                    <div class="font-medium text-sm">{{ activity.label }}</div>
-                  </button>
-                </div>
-              </div>
-  
-              <!-- Duration -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Durée</label>
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-xs text-gray-500 mb-1">Heures</label>
-                    <select 
-                      v-model.number="activityForm.hours"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                
+                <!-- Activity Type -->
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2">Type d'activité</label>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      v-for="activity in activityTypes.slice(0, 4)"
+                      :key="activity.type"
+                      type="button"
+                      @click="selectActivity(activity)"
+                      :class="[
+                        'p-2 rounded-xl border-2 transition-all duration-300 text-center hover:scale-105',
+                        activityForm.type === activity.type
+                          ? 'border-orange-500 bg-orange-50 text-orange-700'
+                          : 'border-gray-200 hover:border-orange-300 text-gray-600'
+                      ]"
                     >
-                      <option v-for="h in 24" :key="h-1" :value="h-1">{{ h-1 }}</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-xs text-gray-500 mb-1">Minutes</label>
-                    <select 
-                      v-model.number="activityForm.minutes"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      required
-                    >
-                      <option v-for="m in 12" :key="(m-1)*5" :value="(m-1)*5">{{ (m-1)*5 }}</option>
-                    </select>
+                      <div class="text-lg mb-1">{{ activity.emoji }}</div>
+                      <div class="font-medium text-xs">{{ activity.label }}</div>
+                    </button>
                   </div>
                 </div>
-                <div v-if="totalDuration" class="mt-3 text-center p-3 bg-orange-50 rounded-xl border border-orange-200">
-                  <p class="text-orange-600 font-medium">Durée totale: {{ totalDuration }}</p>
+              </div>
+              
+              <!-- Second Row: More Activity Types -->
+              <div class="grid grid-cols-1 lg:grid-cols-4 gap-2">
+                <button
+                  v-for="activity in activityTypes.slice(4)"
+                  :key="activity.type"
+                  type="button"
+                  @click="selectActivity(activity)"
+                  :class="[
+                    'p-2 rounded-xl border-2 transition-all duration-300 text-center hover:scale-105',
+                    activityForm.type === activity.type
+                      ? 'border-orange-500 bg-orange-50 text-orange-700'
+                      : 'border-gray-200 hover:border-orange-300 text-gray-600'
+                  ]"
+                >
+                  <div class="text-lg mb-1">{{ activity.emoji }}</div>
+                  <div class="font-medium text-xs">{{ activity.label }}</div>
+                </button>
+              </div>
+  
+              <!-- Third Row: Duration and Intensity -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <!-- Duration -->
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2">Durée</label>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-xs text-gray-500 mb-1">Heures</label>
+                      <select 
+                        v-model.number="activityForm.hours"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      >
+                        <option v-for="h in 24" :key="h-1" :value="h-1">{{ h-1 }}</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-xs text-gray-500 mb-1">Minutes</label>
+                      <select 
+                        v-model.number="activityForm.minutes"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        required
+                      >
+                        <option v-for="m in 12" :key="(m-1)*5" :value="(m-1)*5">{{ (m-1)*5 }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div v-if="totalDuration" class="mt-2 text-center p-2 bg-orange-50 rounded-xl border border-orange-200">
+                    <p class="text-orange-600 font-medium text-sm">Durée totale: {{ totalDuration }}</p>
+                  </div>
+                </div>
+                
+                <!-- Intensity -->
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2">Intensité</label>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button
+                      v-for="intensity in intensityLevels"
+                      :key="intensity.value"
+                      type="button"
+                      @click="activityForm.intensity = intensity.value"
+                      :class="[
+                        'p-3 rounded-xl border-2 transition-all duration-300 text-center',
+                        activityForm.intensity === intensity.value
+                          ? 'border-orange-500 bg-orange-50 text-orange-700'
+                          : 'border-gray-200 hover:border-orange-300 text-gray-600'
+                      ]"
+                    >
+                      <div class="text-xl mb-1">{{ intensity.emoji }}</div>
+                      <div class="font-medium text-xs">{{ intensity.label }}</div>
+                    </button>
+                  </div>
                 </div>
               </div>
   
-              <!-- Intensity -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Intensité</label>
-                <div class="grid grid-cols-3 gap-3">
-                  <button
-                    v-for="intensity in intensityLevels"
-                    :key="intensity.value"
-                    type="button"
-                    @click="activityForm.intensity = intensity.value"
-                    :class="[
-                      'p-3 rounded-xl border-2 transition-all duration-300 text-center',
-                      activityForm.intensity === intensity.value
-                        ? 'border-orange-500 bg-orange-50 text-orange-700'
-                        : 'border-gray-200 hover:border-orange-300 text-gray-600'
-                    ]"
-                  >
-                    <div class="text-lg mb-1">{{ intensity.emoji }}</div>
-                    <div class="font-medium text-xs">{{ intensity.label }}</div>
-                  </button>
-                </div>
-              </div>
-  
-              <!-- Notes -->
+              <!-- Fourth Row: Notes -->
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Notes (optionnel)</label>
                 <textarea 
                   v-model="activityForm.notes"
                   placeholder="Comment s'est passée votre séance ?"
                   rows="3"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
                 ></textarea>
               </div>
   
-              <!-- Submit -->
-              <div class="flex space-x-3 pt-4">
+              <!-- Submit Buttons -->
+              <div class="flex space-x-3 pt-4 border-t border-gray-200">
                 <button 
                   type="button"
                   @click="showActivityModal = false"

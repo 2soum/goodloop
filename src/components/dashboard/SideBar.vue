@@ -1,5 +1,5 @@
 <template>
-    <div class="w-64 bg-white shadow-xl border-r border-gray-200 flex flex-col h-screen">
+    <div class="fixed inset-y-0 left-0 w-64 bg-white shadow-xl border-r border-gray-200 flex flex-col z-50">
       <!-- Header with Logo and User -->
       <div class="p-6 border-b border-gray-200">
         <!-- Logo -->
@@ -12,7 +12,7 @@
           </span>
         </div>
   
-
+       
       </div>
   
       <!-- Navigation -->
@@ -43,25 +43,7 @@
                 ></div>
               </router-link>
             </li>
-            <li>
-              <router-link 
-                to="/analytics" 
-                :class="[
-                  'flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group',
-                  $route.path === '/analytics' 
-                    ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' 
-                    : 'text-gray-700 hover:bg-emerald-50 hover:text-emerald-600'
-                ]"
-              >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span>Analyses</span>
-                <span class="ml-auto bg-emerald-100 text-emerald-600 text-xs px-2 py-1 rounded-full font-semibold">
-                  Pro
-                </span>
-              </router-link>
-            </li>
+            
           </ul>
         </div>
   
@@ -183,10 +165,10 @@
             </li>
             <li>
               <router-link 
-                to="/insights" 
+                to="/chat" 
                 :class="[
                   'flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group',
-                  $route.path === '/insights' 
+                  $route.path === '/chat' 
                     ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/30' 
                     : 'text-gray-700 hover:bg-pink-50 hover:text-pink-600'
                 ]"
@@ -194,7 +176,7 @@
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM15.657 6.343a1 1 0 011.414 0A9.972 9.972 0 0119 12a9.972 9.972 0 01-1.929 5.657 1 1 0 11-1.414-1.414A7.971 7.971 0 0017 12c0-2.21-.896-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 12a5.984 5.984 0 01-.757 2.828 1 1 0 01-1.415-1.414A3.984 3.984 0 0013 12a3.983 3.983 0 00-.172-1.172 1 1 0 010-1.415z" clip-rule="evenodd"/>
                 </svg>
-                <span>Insights IA</span>
+                <span> AI assistant</span>
                 <div class="ml-auto">
                   <div class="w-2 h-2 bg-pink-400 rounded-full animate-pulse"></div>
                 </div>
@@ -202,7 +184,7 @@
             </li>
             <li>
               <router-link 
-                to="/export" 
+                to="/" 
                 :class="[
                   'flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group',
                   $route.path === '/export' 
@@ -213,7 +195,7 @@
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                 </svg>
-                <span>Export</span>
+                <span>Export/ Watch Connect</span>
                 <span class="ml-auto bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full font-semibold">
                   Pro
                 </span>
@@ -222,73 +204,92 @@
           </ul>
         </div>
   
-        <!-- Quick Add Section -->
-        <div class="mb-6">
-          <button 
-            @click="openQuickAdd"
-            class="w-full bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/30 active:scale-95 flex items-center justify-center space-x-2"
-          >
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-            </svg>
-            <span>Ajout rapide</span>
-          </button>
-        </div>
+
       </nav>
   
       <!-- Bottom Section -->
       <div class="p-4 border-t border-gray-200">
-        <!-- Settings -->
-        <div class="mb-4">
-          <router-link 
-            to="/settings" 
-            :class="[
-              'flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group w-full',
-              $route.path === '/settings' 
-                ? 'bg-gray-500 text-white shadow-lg shadow-gray-500/30' 
-                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-800'
-            ]"
-          >
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
-            </svg>
-            <span>Paramètres</span>
-          </router-link>
-        </div>
-  
+
         
+  
+        <!-- Logout -->
+        <div>
+          <button 
+            @click="handleLogout"
+            class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200 group"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span>Déconnexion</span>
+          </button>
+        </div>
       </div>
     </div>
   </template>
   
   <script>
+  import { ref, computed, onMounted } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { getCurrentUser, signOut } from '@/services/auth'
+  
   export default {
     name: 'Sidebar',
     emits: ['quick-add', 'upgrade-plan'],
-    data() {
-      return {
-        user: {
-          name: 'Thomas Veillard',
-          plan: 'Plan Gratuit'
-        }
-      };
-    },
-    methods: {
-      getUserInitials() {
-        return this.user.name
+    setup() {
+      const router = useRouter()
+      const currentUser = ref(null)
+      
+      onMounted(() => {
+        currentUser.value = getCurrentUser()
+      })
+      
+      const userName = computed(() => {
+        return currentUser.value?.name || 'Utilisateur'
+      })
+      
+      const userEmail = computed(() => {
+        return currentUser.value?.email || 'email@example.com'
+      })
+      
+      const userProvider = computed(() => {
+        const provider = currentUser.value?.provider || 'email'
+        return provider === 'microsoft' ? 'Microsoft' : 'Email'
+      })
+      
+      const userInitials = computed(() => {
+        return userName.value
           .split(' ')
           .map(word => word.charAt(0).toUpperCase())
           .slice(0, 2)
-          .join('');
-      },
-      openQuickAdd() {
-        this.$emit('quick-add');
-      },
-      upgradePlan() {
-        this.$emit('upgrade-plan');
+          .join('')
+      })
+      
+      const openQuickAdd = () => {
+        // Émettre l'événement vers le parent
+        // this.$emit('quick-add')
+      }
+      
+      const upgradePlan = () => {
+        // this.$emit('upgrade-plan')
+      }
+      
+      const handleLogout = () => {
+        signOut()
+        router.push('/')
+      }
+      
+      return {
+        userName,
+        userEmail,
+        userProvider,
+        userInitials,
+        openQuickAdd,
+        upgradePlan,
+        handleLogout
       }
     }
-  };
+  }
   </script>
   
   <style scoped>
